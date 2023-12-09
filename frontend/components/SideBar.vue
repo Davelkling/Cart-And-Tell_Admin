@@ -1,7 +1,12 @@
 <script setup lang="ts">
-
+    function logout() {
+        const token = useCookie('token');
+        token.value = "";
+        const userObj = useUserObj();
+        userObj.value.loggedIn = false;
+        navigateTo('/login');
+    }
 </script>
-
 <template>
     <div class="w-[400px] bg-[#5B8ED8] overflow-hidden">
         <NuxtLink to="/" class="text-[#282F7A] mb-4">
@@ -50,12 +55,12 @@
                     <h2 class="font-bold text-2xl">Unverified Merchants</h2>  
                 </div>
             </NuxtLink>
-            <div class="">
+            <button @click="logout" class="button">
                 <div class="flex justify-start items-start gap-4 py-5 px-12 absolute bottom-0">
                     <span class="material-symbols-outlined font-black text-3xl">logout</span>
                     <h2 class="font-bold text-2xl">Logout</h2>  
                 </div>
-            </div>
+            </button>
         </div>
     </div>
 </template>
