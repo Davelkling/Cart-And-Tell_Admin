@@ -8,7 +8,7 @@
     }
 </script>
 <template>
-    <div class="w-[400px] bg-[#5B8ED8] overflow-hidden">
+    <div class="w-[400px] bg-[#5B8ED8] overflow-hidden shrink-0">
         <NuxtLink to="/" class="text-[#282F7A] mb-4">
         <div class="flex flex-col justify-start items-center p-4 bg-white rounded-b-2xl">
             <div class="flex flex-col justify-start ">
@@ -65,7 +65,7 @@
     </div>
 </template>
 
-<style scoped>
+<style scoped type="postcss">
     .router-link-active > div.flex.justify-start.items-start{
         @apply bg-[#79A3DF]
     }
