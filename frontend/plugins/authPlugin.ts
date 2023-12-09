@@ -1,9 +1,8 @@
 export default defineNuxtPlugin( async () => {
-    console.log("this is running");
     const token = useCookie('token');
     const {loggedIn} = useUserObj().value;
     const route = useRoute().fullPath;
-    if (!loggedIn) {
+    if (!loggedIn && !token) {
         useUserObj().value.loggedIn = false;
     }
     if (route !== '/login') {
@@ -19,7 +18,7 @@ export default defineNuxtPlugin( async () => {
             email:string,
             id:number,
             cartCount: number,
-        }>(`${API}/auth/validate`,{
+        }>(`${API}/auth/validateAsAdmin`,{
             headers:{
                 Authorization: `Bearer ${token.value}`,
                 ContentType: 'application/json',
@@ -36,15 +35,8 @@ export default defineNuxtPlugin( async () => {
             return;
         }
         if (result) {
-            if (result.email == useRuntimeConfig().public.ADMIN_EMAIL) {
-                const userObj = useUserObj();
-                userObj.value = {...result,loggedIn:true};
-            }
-            else {
-                useUserObj().value.loggedIn = false;
-                await navigateTo('/login',{ redirectCode: 301 });
-                return;
-            }
+            const userObj = useUserObj();
+            userObj.value = {...result,loggedIn:true};
         }
     }
 });
