@@ -3,7 +3,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig:{
     public:{
-      API:process.env.API
+      API:process.env.API,
+      ADMIN_EMAIL:process.env.ADMIN_EMAIL
     }
   },
   app: {
