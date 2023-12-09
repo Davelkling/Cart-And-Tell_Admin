@@ -1,19 +1,9 @@
-<script setup>
-
-</script>
-
 <template>
     <div class="bg-[#F8F9FD]">
         <div class="flex justify-between">
             <SideBar/>
-            <div>
-                
-            </div>
+            <Home/>
             <SettingBar/>
         </div> 
     </div>
 </template>
-
-<style scoped>
-
-</style>
