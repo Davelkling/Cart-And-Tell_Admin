@@ -17,5 +17,9 @@
     "nuxt": "^3.8.2",
     "vue": "^3.3.10",
     "vue-router": "^4.2.5"
+  },
+  "dependencies": {
+    "@vueuse/core": "^10.7.0",
+    "date-fns": "^2.30.0"
   }
 }
