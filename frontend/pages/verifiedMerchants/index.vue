@@ -28,7 +28,7 @@ const API = useRuntimeConfig().public.API;
         },
         merchantId:number,
         products:[any]
-    }]>(`${API}/merchant/unVerified`,{
+    }]>(`${API}/merchant/verified`,{
         headers: {
             'Authorization': `Bearer ${token.value}`
         }
@@ -52,7 +52,7 @@ const API = useRuntimeConfig().public.API;
         let isError = false;
         const token = useCookie('token');
         const formData = new FormData();
-        formData.append('isVerified', 'true');
+        formData.append('isVerified', 'false');
         const data = await $fetch<{message:string}>(`${API}/merchant/${selectedId.value}`,{
             method: 'PATCH',
             headers: {
@@ -77,7 +77,7 @@ const API = useRuntimeConfig().public.API;
             <SideBar/>
             <div class="p-4 w-full h-[100svh] overflow-x-scroll relative">
                 <div class="bg-white rounded-3xl w-full p-4 text-center">
-                    <h1 class="text-5xl font-black">Unverified Merchants</h1>
+                    <h1 class="text-5xl font-black">Verified Merchants</h1>
                 </div>
                 <div class="bg-white rounded-3xl w-full p-4 h-full mt-4">
                     <!-- Add Modal -->
@@ -88,7 +88,7 @@ const API = useRuntimeConfig().public.API;
                                     <span class="material-symbols-outlined">close</span>
                                 </button>
                             </div>
-                            <p class="font-bold text-2xl text-center">Set Merchant Verified</p>
+                            <p class="font-bold text-2xl text-center">Set Merchant Unverified</p>
                             <div class="mt-4">
                                 <label class="block mb-1 font-bold text-lg" for="name">name</label>
                                 <p>{{merchants!.filter(merchants => merchants.id == selectedId)[0].name }}</p>
@@ -168,7 +168,7 @@ const API = useRuntimeConfig().public.API;
                                     <p>{{ merchant.isVerified }}</p>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium">
-                                    <button @click="openModal" value="toggle" :id="merchant.id.toString()" type="button" class="text-blue-600 hover:text-red-900 px-4 py-2 border-2 rounded-full">Set verified</button>
+                                    <button @click="openModal" value="toggle" :id="merchant.id.toString()" type="button" class="text-red-600 hover:text-indigo-900 px-4 py-2 border-2 rounded-full">Set Unverified</button>
                                 </td>
                             </tr>
                         </tbody>

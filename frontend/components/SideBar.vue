@@ -55,6 +55,12 @@
                     <h2 class="font-bold text-2xl">Unverified Merchants</h2>  
                 </div>
             </NuxtLink>
+            <NuxtLink to="verifiedMerchants">
+                <div class="flex justify-start items-start gap-4 py-5 px-12">
+                    <span class="material-symbols-outlined font-black text-3xl">person_check</span>
+                    <h2 class="font-bold text-2xl">verified Merchants</h2>  
+                </div>
+            </NuxtLink>
             <button @click="logout" class="button">
                 <div class="flex justify-start items-start gap-4 py-5 px-12 absolute bottom-0">
                     <span class="material-symbols-outlined font-black text-3xl">logout</span>
