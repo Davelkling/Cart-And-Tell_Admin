@@ -7,7 +7,6 @@ const API = useRuntimeConfig().public.API;
         }
     });
     import { useFileDialog } from '@vueuse/core'
-import { parse } from 'vue/compiler-sfc';
     const formData = reactive<{name:string,icon:File|null}>({
         name: "",
         icon: null
