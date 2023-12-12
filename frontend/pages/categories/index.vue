@@ -76,7 +76,9 @@ const API = useRuntimeConfig().public.API;
         isLoading.value = true;
         let isError = false;
         const formDataCreate = new FormData();
-        formDataCreate.append('name',formData.name);
+        if (formData.name) {
+            formDataCreate.append('name',formData.name);
+        }
         if (formData.icon) {
             formDataCreate.append('image',formData.icon!);
         }

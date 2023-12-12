@@ -112,11 +112,11 @@ const API = useRuntimeConfig().public.API;
             editModal.value = true;
             selectedId.value = parseInt(e.target.id);
             // formData.name = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].name;
-            formData.description = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].description;
-            formData.categoryId = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].categoryId;
-            formData.merchantEndValidity = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].merchantEndValidity;
-            formData.merchantStartValidity = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].merchantStartValidity;
-            formData.merchantRelationship = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].merchantRelationship;
+            // formData.description = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].description;
+            // formData.categoryId = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].categoryId;
+            // formData.merchantEndValidity = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].merchantEndValidity;
+            // formData.merchantStartValidity = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].merchantStartValidity;
+            // formData.merchantRelationship = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].merchantRelationship;
             // formData.userId = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].userId;
             // formData.website = merchants.value!.filter(merchants => merchants.id == selectedId.value)[0].website;
         }
@@ -311,7 +311,7 @@ const API = useRuntimeConfig().public.API;
                                         <span class="material-symbols-outlined">close</span>
                                     </button>
                                 </div>
-                                <p class="font-bold text-2xl">Create merchants</p>
+                                <p class="font-bold text-2xl">Update merchant</p>
                                 <p>Note: Some Fields are Intentially left blank in order to not edited</p>
                                 <div class="mt-4">
                                     <label class="block mb-1 font-bold text-lg" for="name">userId</label>
@@ -362,7 +362,7 @@ const API = useRuntimeConfig().public.API;
                                     <input v-model="formData.merchantEndValidity" type="date" name="" id="">
                                 </div>
                                 <div class="flex-1 basis-0 flex justify-center items-end mt-4">  
-                                    <button @click="update" value="create" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Create merchants</button>
+                                    <button @click="update" value="create" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Update merchant</button>
                                 </div>
                                 <p v-if="isLoading" class="text-center">Loading</p>
                             </div> 
