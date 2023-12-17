@@ -28,7 +28,7 @@ const API = useRuntimeConfig().public.API;
         },
         merchantId:number,
         products:[any]
-    }]>(`${API}/merchant/`,{
+    }]>(`${API}/merchant?status=Pending`,{
         headers: {
             'Authorization': `Bearer ${token.value}`
         }
