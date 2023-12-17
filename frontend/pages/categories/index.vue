@@ -235,7 +235,7 @@ const API = useRuntimeConfig().public.API;
                     </table>
                 </div>
             </div>
-            <SettingBar/>
+            <!-- <SettingBar/> -->
         </div> 
     </div>
 </template>

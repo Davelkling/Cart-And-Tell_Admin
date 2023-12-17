@@ -498,7 +498,7 @@ const API = useRuntimeConfig().public.API;
                     </div>
                 </div>
             </div>
-            <SettingBar class="fixed right-0"/>
+            <!-- <SettingBar/> -->
         </div> 
     </div>
 </template>

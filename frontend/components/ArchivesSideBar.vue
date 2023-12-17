@@ -19,52 +19,39 @@
         </div>
         </NuxtLink>
         <div class="h-full text-white">
-            <NuxtLink to="/">
+            <div class="flex justify-center items-center px-5 relative">
+                <NuxtLink to="/" class="absolute left-8">
+                    <div class="h-12 w-12 flex justify-center items-center ">
+                        <span class="material-symbols-outlined font-black text-3xl">west</span> 
+                    </div>
+                </NuxtLink>
+                <div class="p-4 flex justify-center items-center flex-col">
+                    <span class="material-symbols-outlined font-black text-7xl">delete</span>
+                    <h1 class="font-bold">Archives</h1>
+                </div>
+            </div>
+            <NuxtLink to="/archives">
                 <div class="flex justify-start items-start gap-4 py-5 px-12">
                     <span class="material-symbols-outlined font-black text-3xl">home</span>
                     <h2 class="font-bold text-2xl">Overview</h2>    
                 </div>
             </NuxtLink>
-            <NuxtLink to="/categories">
-                <div class="flex justify-start items-start gap-4 py-5 px-12">
-                    <span class="material-symbols-outlined font-black text-3xl">category</span>
-                    <h2 class="font-bold text-2xl">Categories</h2>    
-                </div>
-            </NuxtLink>
-            <NuxtLink to="/users">
+            <NuxtLink to="/archives/users">
                 <div class="flex justify-start items-start gap-4 py-5 px-12">
                     <span class="material-symbols-outlined font-black text-3xl">person</span>
-                    <h2 class="font-bold text-2xl">Users</h2>    
+                    <h2 class="font-bold text-2xl">Archived Users</h2>    
                 </div>
             </NuxtLink>
-            <NuxtLink to="/merchants">
+            <NuxtLink to="/archives/bannedUsers">
                 <div class="flex justify-start items-start gap-4 py-5 px-12">
-                    <span class="material-symbols-outlined font-black text-3xl">point_of_sale</span>
-                    <h2 class="font-bold text-2xl">Merchants</h2>    
+                    <span class="material-symbols-outlined font-black text-3xl">person</span>
+                    <h2 class="font-bold text-2xl">Banned Users</h2>    
                 </div>
             </NuxtLink>
-            <NuxtLink to="products">
-                <div class="flex justify-start items-start gap-4 py-5 px-12">
-                    <span class="material-symbols-outlined font-black text-3xl">inventory_2</span>
-                    <h2 class="font-bold text-2xl">Products</h2>    
-                </div>
-            </NuxtLink>
-            <NuxtLink to="unverifiedMerchants">
+            <NuxtLink to="/archives/merchants">
                 <div class="flex justify-start items-start gap-4 py-5 px-12">
                     <span class="material-symbols-outlined font-black text-3xl">person_apron</span>
-                    <h2 class="font-bold text-2xl">Pending Merchant</h2>  
-                </div>
-            </NuxtLink>
-            <NuxtLink to="verifiedMerchants">
-                <div class="flex justify-start items-start gap-4 py-5 px-12">
-                    <span class="material-symbols-outlined font-black text-3xl">person_check</span>
-                    <h2 class="font-bold text-2xl">Verified Merchants</h2>  
-                </div>
-            </NuxtLink>
-            <NuxtLink to="archives">
-                <div class="flex justify-start items-start gap-4 py-5 px-12">
-                    <span class="material-symbols-outlined font-black text-3xl">delete</span>
-                    <h2 class="font-bold text-2xl">Archives</h2>  
+                    <h2 class="font-bold text-2xl">Archived Merchants</h2>  
                 </div>
             </NuxtLink>
             <button @click="logout" class="button">

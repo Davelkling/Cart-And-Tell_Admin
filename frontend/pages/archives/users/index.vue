@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const API = useRuntimeConfig().public.API;
     const token = useCookie('token');
-    const {data:users,refresh} = await useFetch<[{id:number,email:string,password:string,isMerchant:boolean,merchant:null|{}}]>(`${API}/user?status=Active`,{
+    const {data:users,refresh} = await useFetch<[{id:number,email:string,password:string,isMerchant:boolean,merchant:null|{}}]>(`${API}/user?status=Removed`,{
         headers: {
             'Authorization': `Bearer ${token.value}`
         }
@@ -16,14 +16,12 @@ const API = useRuntimeConfig().public.API;
     const createModal = ref(false);
     const editModal = ref(false);
     const deleteModal = ref(false);
-    const banModal = ref(false);
     function closeModal(e:Event) {
         e.stopPropagation();
         createModal.value = false;
         editModal.value = false;
         deleteModal.value = false;
-        banModal.value = false;
-
+        
         formData.password = "";
         formData.email = "";
         formData.isMerchant = false;
@@ -49,10 +47,6 @@ const API = useRuntimeConfig().public.API;
         }
         else if (e.target!.value === "archive") {
             deleteModal.value = true;
-            selectedId.value = parseInt(e.target.id);
-        }
-        else if (e.target!.value === "ban") {
-            banModal.value = true;
             selectedId.value = parseInt(e.target.id);
         }
     }
@@ -155,41 +149,14 @@ const API = useRuntimeConfig().public.API;
         isLoading.value = false;
         console.log(data);
     }
-    async function Ban() {
-        console.log(selectedId.value);
-        isLoading.value = true;
-        let isError = false;
-        const formDataUpdate:{[any:string]:string|boolean} = {status:'Removed'}
-        const token = useCookie('token');
-        const data = await $fetch<{message:string}>(`${API}/user/${selectedId.value}`,{
-            method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${token.value}`
-            },
-            body: formDataUpdate
-        }).catch(error => {
-            alert(error.data.message);
-            isError = true
-            refresh();
-            return;
-        })
-        if (!isError) {
-            closeModal(new Event('click'));
-            refresh();
-        }
-        refresh();
-        closeModal(new Event('click'))
-        isLoading.value = false;
-        console.log(data);
-    }
 </script>
 <template>
     <div class="bg-[#F8F9FD]">
         <div class="flex justify-between">
-            <SideBar/>
+            <ArchivesSideBar/>
             <div class="p-4 w-full h-[100svh] overflow-x-scroll relative">
                 <div class="bg-white rounded-3xl w-full p-4 text-center">
-                    <h1 class="text-5xl font-black">users</h1>
+                    <h1 class="text-5xl font-black">Archived Users</h1>
                 </div>
                 <div class="bg-white rounded-3xl w-full p-4 h-full mt-4">
                     <!-- Add Modal -->
@@ -262,7 +229,7 @@ const API = useRuntimeConfig().public.API;
                                 </button>
                             </div>
                             <p class="font-bold text-2xl">Delete user</p>
-                            <p>Are you sure you want to Delete this User? <br>(This will put the user in Archives)</p>
+                            <p>Are you sure you want to Delete this User? <br>(This delete the User Permanently)</p>
                             <div class="mt-4">
                                 <label class="block mb-1 font-bold text-lg" for="email">email</label>
                                 <p>{{users!.filter(user => user.id == selectedId)[0].email }}</p>
@@ -276,34 +243,7 @@ const API = useRuntimeConfig().public.API;
                                 <p class="">{{users!.filter(user => user.id == selectedId)[0].isMerchant }}</p>
                             </div>
                             <div class="flex-1 basis-0 flex justify-center items-end">  
-                                <button @click="Archive" value="archive" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Delete user</button>
-                            </div>
-                        </div> 
-                    </div>
-                    <!-- Add Ban -->
-                    <div v-if="banModal" class="absolute h-full w-full bg-transparent flex left-0 p-6 justify-center items-center">
-                        <div class="h-[500px] w-[500px] bg-white rounded-lg shadow-md p-4 z-4 flex flex-col" @click="">
-                            <div class="flex justify-end">
-                                <button @click="closeModal">
-                                    <span class="material-symbols-outlined">close</span>
-                                </button>
-                            </div>
-                            <p class="font-bold text-2xl">Ban User</p>
-                            <p>Are you sure you want to User? this User? <br>(This will put the user in Archives)</p>
-                            <div class="mt-4">
-                                <label class="block mb-1 font-bold text-lg" for="email">email</label>
-                                <p>{{users!.filter(user => user.id == selectedId)[0].email }}</p>
-                            </div>
-                            <div class="mt-4">
-                                <label class="block mb-1 font-bold text-lg" for="email">password</label>
-                                <p class="w-full text-ellipsis whitespace-nowrap overflow-hidden">{{users!.filter(user => user.id == selectedId)[0].password }}</p>
-                            </div>
-                            <div class="mt-4">
-                                <label class="block mb-1 font-bold text-lg" for="email">isMerchant</label>
-                                <p class="">{{users!.filter(user => user.id == selectedId)[0].isMerchant }}</p>
-                            </div>
-                            <div class="flex-1 basis-0 flex justify-center items-end">  
-                                <button @click="Ban" value="ban" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Ban user</button>
+                                <button @click="Delete" value="delete" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Delete user</button>
                             </div>
                         </div> 
                     </div>
@@ -346,8 +286,7 @@ const API = useRuntimeConfig().public.API;
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium">
                                     <button @click="openModal" value="edit" :id="user.id.toString()" type="button" class="text-indigo-600 hover:text-indigo-900">Edit</button>
-                                    <button @click="openModal" value="archive" :id="user.id.toString()" type="button" class="ml-2 text-red-600 hover:text-red-900">Delete</button>
-                                    <button @click="openModal" value="ban" :id="user.id.toString()" type="button" class="ml-2 text-red-600 hover:text-red-900">Ban</button>
+                                    <button @click="openModal" value="delete" :id="user.id.toString()" type="button" class="ml-2 text-red-600 hover:text-red-900">Delete</button>
                                 </td>
                             </tr>
                         </tbody>
