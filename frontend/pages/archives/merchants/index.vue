@@ -28,37 +28,36 @@ const API = useRuntimeConfig().public.API;
         },
         merchantId:number,
         products:[any]
-    }]>(`${API}/merchant/verified`,{
+    }]>(`${API}/merchant?status=Removed`,{
         headers: {
             'Authorization': `Bearer ${token.value}`
         }
     });
     const isLoading = ref(false);
     const selectedId = ref(NaN);
-    const toggleModal = ref(false);
+    const deleteModal = ref(false);
     function closeModal(e:Event) {
         e.stopPropagation();
-        toggleModal.value = false;
+        deleteModal.value = false;
         refresh();
     }
     function openModal(e:any) {
-        if (e.target!.value === "toggle") {
-            toggleModal.value = true;
+        if (e.target!.value === "delete") {
+            deleteModal.value = true;
             selectedId.value = e.target!.id;
         }
     }
-    async function toggle() {
+    async function Delete() {
         isLoading.value = true;
         let isError = false;
         const token = useCookie('token');
         const formData = new FormData();
         formData.append('isVerified', 'false');
         const data = await $fetch<{message:string}>(`${API}/merchant/${selectedId.value}`,{
-            method: 'PATCH',
+            method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token.value}`
             },
-            body:formData
         }).catch(error => {
             alert(error.data.message);
             isError = true
@@ -74,21 +73,22 @@ const API = useRuntimeConfig().public.API;
 <template>
     <div class="bg-[#F8F9FD]">
         <div class="flex justify-between">
-            <SideBar/>
+            <ArchivesSideBar/>
             <div class="p-4 w-full h-[100svh] overflow-x-scroll relative">
                 <div class="bg-white rounded-3xl w-full p-4 text-center">
-                    <h1 class="text-5xl font-black">Verified Merchants</h1>
+                    <h1 class="text-5xl font-black">Archived Merchants</h1>
                 </div>
                 <div class="bg-white rounded-3xl w-full p-4 h-full mt-4">
                     <!-- Add Modal -->
-                    <div v-if="toggleModal" class="absolute h-full w-full bg-transparent flex left-0 p-6 justify-center items-center">
+                    <div v-if="deleteModal" class="absolute h-full w-full bg-transparent flex left-0 p-6 justify-center items-center">
                         <div class="w-[500px] bg-white rounded-lg shadow-md p-4 z-4 flex flex-col" @click="">
                             <div class="flex justify-end">
                                 <button @click="closeModal">
                                     <span class="material-symbols-outlined">close</span>
                                 </button>
                             </div>
-                            <p class="font-bold text-2xl text-center">Set Merchant Unverified</p>
+                            <p class="font-bold text-2xl text-center">Delete Merchant</p>
+                            <p>This will Delete Merchant Permanently</p>
                             <div class="mt-4">
                                 <label class="block mb-1 font-bold text-lg" for="name">name</label>
                                 <p>{{merchants!.filter(merchants => merchants.id == selectedId)[0].name }}</p>
@@ -116,7 +116,7 @@ const API = useRuntimeConfig().public.API;
                                     <p class="w-full text-ellipsis whitespace-nowrap overflow-hidden">{{useDateFormat(merchants!.filter(merchants => merchants.id == selectedId)[0].merchantEndValidity,"YYYY-MM-DD").value }}</p>
                                 </div> 
                             <div class="flex-1 basis-0 flex justify-center items-end mt-4">  
-                                <button @click="toggle" value="toggle" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Confirm</button>
+                                <button @click="Delete" value="delete" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Confirm</button>
                             </div>
                             <p v-if="isLoading" class="text-center">Loading</p>
                         </div> 
@@ -168,7 +168,7 @@ const API = useRuntimeConfig().public.API;
                                     <p>{{ merchant.isVerified }}</p>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium">
-                                    <!-- <button @click="openModal" value="toggle" :id="merchant.id.toString()" type="button" class="text-red-600 hover:text-indigo-900 px-4 py-2 border-2 rounded-full">Set Unverified</button> -->
+                                    <button @click="openModal" value="delete" :id="merchant.id.toString()" type="button" class="text-red-600 hover:text-indigo-900 px-4 py-2 border-2 rounded-full">Delete</button>
                                 </td>
                             </tr>
                         </tbody>

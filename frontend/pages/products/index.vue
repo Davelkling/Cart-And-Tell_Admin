@@ -94,6 +94,13 @@ const API = useRuntimeConfig().public.API;
         if (formData.image) {
             formDataCreate.append('image',formData.image!);
         }
+        if (formData.description) {
+            formDataCreate.append('description',formData.description);
+        }
+        if (formData.amount) {
+            formDataCreate.append('amount',formData.amount.toString());
+        }
+        
         const token = useCookie('token');
         const data = await $fetch<{message:string}>(`${API}/merchant/${selectedMerchantId.value}/products/${selectedId.value}`,{
             method: 'PATCH',
@@ -282,7 +289,7 @@ const API = useRuntimeConfig().public.API;
                     </table>
                 </div>
             </div>
-            <SettingBar/>
+            <!-- <SettingBar/> -->
         </div> 
     </div>
 </template>
