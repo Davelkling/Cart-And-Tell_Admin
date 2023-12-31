@@ -126,7 +126,7 @@ async function handler() {
           </svg>
           Loading...
         </button>
-        <div class="flex justify-center">
+        <div class="flex justify-center h-[40px]">
           <ul>
             <li class="mt-4 font-bold">{{ errorMessage }}</li>
           </ul>
