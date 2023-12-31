@@ -1,5 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  routeRules: {
+    "/websiteSettings/editor": { ssr: false }
+  },
   devtools: { enabled: true },
   runtimeConfig: {
     public: {
@@ -17,6 +20,5 @@ export default defineNuxtConfig({
   },
   modules: [
     '@nuxtjs/tailwindcss',
-
   ]
 })

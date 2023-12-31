@@ -1,4 +1,7 @@
 <script setup lang="ts">
+const getBgClass = (type: string) => {
+  return useRoute().query.type === type ? "bg-active" : "";
+};
 function logout() {
   const token = useCookie("token");
   token.value = "";
@@ -39,7 +42,7 @@ function logout() {
         </div>
       </div>
       <NuxtLink to="/websiteSettings">
-        <div class="flex justify-start items-start gap-4 py-5 px-12">
+        <div class="link flex justify-start items-start gap-4 py-5 px-12">
           <span class="material-symbols-outlined font-black text-3xl"
             >home</span
           >
@@ -54,9 +57,52 @@ function logout() {
           <h2 class="font-bold text-2xl">Bank Details</h2>
         </div>
       </NuxtLink>
+      <div class="px-12">
+        <p class="font-black text-center text-2xl py-4">Website CMS</p>
+      </div>
+      <NuxtLink to="/websiteSettings/editor?type=AboutUs">
+        <div
+          :class="getBgClass('AboutUs')"
+          class="flex justify-start items-start gap-4 py-5 px-12"
+        >
+          <h2 class="px-12 font-bold text-2xl">About Us</h2>
+        </div>
+      </NuxtLink>
+      <NuxtLink to="/websiteSettings/editor?type=ContactUs">
+        <div
+          :class="getBgClass('ContactUs')"
+          class="flex justify-start items-start gap-4 py-5 px-12"
+        >
+          <h2 class="px-12 font-bold text-2xl">Contact Us</h2>
+        </div>
+      </NuxtLink>
+      <NuxtLink to="/websiteSettings/editor?type=Policy">
+        <div
+          :class="getBgClass('Policy')"
+          class="flex justify-start items-start gap-4 py-5 px-12"
+        >
+          <h2 class="px-12 font-bold text-2xl">Policy</h2>
+        </div>
+      </NuxtLink>
+      <NuxtLink to="/websiteSettings/editor?type=Certifications">
+        <div
+          :class="getBgClass('Certifications')"
+          class="flex justify-start items-start gap-4 py-5 px-12"
+        >
+          <h2 class="px-12 font-bold text-2xl">Certifications</h2>
+        </div>
+      </NuxtLink>
+      <NuxtLink to="/websiteSettings/editor?type=Ratings">
+        <div
+          :class="getBgClass('Ratings')"
+          class="ratings flex justify-start items-start gap-4 py-5 px-12"
+        >
+          <h2 class="px-12 font-bold text-2xl">Ratings</h2>
+        </div>
+      </NuxtLink>
       <button @click="logout" class="button">
         <div
-          class="flex justify-start items-start gap-4 py-5 px-12 absolute bottom-0"
+          class="flex justify-start items-start gap-4 py-5 px-12 fixed bottom-0"
         >
           <span class="material-symbols-outlined font-black text-3xl"
             >logout</span
@@ -69,7 +115,10 @@ function logout() {
 </template>
 
 <style scoped type="postcss">
-.router-link-active > div.flex.justify-start.items-start {
+.router-link-active > div.link.flex.justify-start.items-start {
   @apply bg-[#79A3DF];
+}
+.bg-active {
+  background-color: #79a3df;
 }
 </style>
