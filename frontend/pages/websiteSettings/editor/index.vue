@@ -102,15 +102,19 @@ function handleFilePicker(callback: any) {
 }
 
 function cancelButtonHandler() {
-  if (
-    confirm(
-      "You unsaved changes on the editor.\n Do you want to discard changes?"
-    )
-  ) {
-    editMode.value = false;
-    editing.value = false;
-    content.value = data.value.html;
+  if (editing.value) {
+    if (
+      confirm(
+        "You unsaved changes on the editor.\n Do you want to discard changes?"
+      )
+    ) {
+    } else {
+      return false;
+    }
   }
+  editMode.value = false;
+  editing.value = false;
+  content.value = data.value.html;
 }
 // Apply Changes Button Handler
 async function buttonHandler() {
