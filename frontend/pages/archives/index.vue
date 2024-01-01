@@ -1,20 +1,27 @@
 <script setup>
     const API = useRuntimeConfig().public.API;
     const token = useCookie('token');
-    const {data:users} = await useFetch(`${API}/user?status=Removed`,{
+    const path = useRoute().path;
+    const {data:users,pending:pending1} = await useFetch(`${API}/user?status=Removed`,{
+        lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
-        }
+        },
+        key:path
     });
-    const {data:banned} = await useFetch(`${API}/user?status=Banned`,{
+    const {data:banned,pending:pending2} = await useFetch(`${API}/user?status=Banned`,{
+        lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
-        }
+        },
+        key:path
     });
-    const {data:merchants} = await useFetch(`${API}/merchant?status=Removed`,{
+    const {data:merchants,pending:pending3} = await useFetch(`${API}/merchant?status=Removed`,{
+        lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
-        }
+        },
+        key:path
     });
 </script>
 
@@ -27,18 +34,24 @@
                     <h1 class="text-5xl font-black">Overview</h1>
                 </div>
                 <div class="bg-white rounded-3xl w-full p-4 text-center h-full mt-4">
-                    <div class="flex justify-between items-center w-full">
+                    <div class="flex justify-between items-center w-full" v-if="pending1 && pending2 && pending3">
+                        <div class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full h-[96px] animate-pulse" v-for="i in Array.from({length:3})">
+                            <div class="h-5 w-80 bg-gray-500 mb-4 rounded-md"></div>
+                            <div class="h-5 w-12 bg-gray-500 rounded-md"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center w-full" v-else>
                         <div class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full">
                             <h1 class="text-2xl font-bold">Total Archived Users</h1>
-                            <h2 class="text-2xl font-bold">{{ [...users].length }}</h2>
+                            <h2 class="text-2xl font-bold">{{ users.length }}</h2>
                         </div>
                         <div class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full">
                             <h1 class="text-2xl font-bold">Total Banned Users</h1>
-                            <h2 class="text-2xl font-bold">{{ [...banned].length }}</h2>
+                            <h2 class="text-2xl font-bold">{{ banned.length }}</h2>
                         </div>
                         <div class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full">
                             <h1 class="text-2xl font-bold">Total Archived Merchants</h1>
-                            <h2 class="text-2xl font-bold">{{ [...merchants].length }}</h2>
+                            <h2 class="text-2xl font-bold">{{ merchants.length }}</h2>
                         </div>
                     </div>
                 </div>

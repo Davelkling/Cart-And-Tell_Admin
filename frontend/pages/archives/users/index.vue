@@ -1,7 +1,8 @@
 <script setup lang="ts">
 const API = useRuntimeConfig().public.API;
     const token = useCookie('token');
-    const {data:users,refresh} = await useFetch<[{id:number,email:string,password:string,isMerchant:boolean,merchant:null|{}}]>(`${API}/user?status=Removed`,{
+    const {data:users,refresh,pending} = await useFetch<[{id:number,email:string,password:string,isMerchant:boolean,merchant:null|{}}]>(`${API}/user?status=Removed`,{
+        lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
         }
@@ -250,7 +251,8 @@ const API = useRuntimeConfig().public.API;
                     <div class="flex justify-between items-center">
                         <div class="flex justify-start items-center">
                             <p class="font-bold p-4">Total of users: </p>
-                            <p class="font-bold">{{ (users!.length) ? users!.length : 0 }}</p>
+                            <div v-if="pending" class="h-5 rounded-md w-5 bg-gray-400"></div>
+                            <p v-else class="font-bold">{{ (users!.length) ? users!.length : 0 }}</p>
                         </div>
                         <div>
                             <button @click="openModal" value="create" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Add user</button>
@@ -267,8 +269,13 @@ const API = useRuntimeConfig().public.API;
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200" v-for="user in users" :key="user.id">
-                            <tr>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr class="animate-pulse" v-if="pending" v-for="i in Array.from({length:10})">
+                                <td class="px-6 py-4 whitespace-nowrap h-[81px]" v-for="i in Array.from({length:6})">
+                                    <div class="h-[50%] rounded-md w-full bg-gray-400"></div>
+                                </td>
+                            </tr>
+                            <tr v-else v-for="user in users" :key="user.id">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <p>{{ user.id}}</p>
                                 </td>

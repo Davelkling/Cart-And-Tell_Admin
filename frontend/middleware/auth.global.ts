@@ -1,25 +1,25 @@
-export default defineNuxtPlugin( async () => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
     const token = useCookie('token');
-    const {loggedIn} = useUserObj().value;
-    const route = useRoute().fullPath;
+    const { loggedIn } = useUserObj().value;
     if (!loggedIn && !token) {
+        console.log("this is called");
         useUserObj().value.loggedIn = false;
+        return navigateTo('/login');
     }
-    if (route !== '/login') {
+    if (to.path !== '/login') {
         const API = useRuntimeConfig().public.API;
         if (token.value === undefined) {
             useUserObj().value.loggedIn = false;
-            await navigateTo('/login'); 
-            return;
+            return navigateTo('/login');
         }
         // Verify token
         let isInvalidToken = null;
-        const result:any = await $fetch<{
-            email:string,
-            id:number,
+        const result: any = await $fetch<{
+            email: string,
+            id: number,
             cartCount: number,
-        }>(`${API}/auth/validateAsAdmin`,{
-            headers:{
+        }>(`${API}/auth/validateAsAdmin`, {
+            headers: {
                 Authorization: `Bearer ${token.value}`,
                 ContentType: 'application/json',
             },
@@ -31,13 +31,11 @@ export default defineNuxtPlugin( async () => {
             const token = useCookie('token');
             token.value = null;
             useUserObj().value.loggedIn = false;
-            await navigateTo('/login',{ redirectCode: 301 });
-            return;
+            return navigateTo('/login', { redirectCode: 301 });
         }
         if (result) {
             const userObj = useUserObj();
-            userObj.value = {...result,loggedIn:true};
+            userObj.value = { ...result, loggedIn: true };
         }
     }
-});
-
+})

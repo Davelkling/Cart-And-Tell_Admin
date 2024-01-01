@@ -7,7 +7,7 @@ const API = useRuntimeConfig().public.API;
         NonExclusiveDistributor = "NonExclusiveDistributor"
     }
     const token = useCookie('token');
-    const {data:merchants,refresh} = await useFetch<[{
+    const {data:merchants,refresh,pending} = await useFetch<[{
 [x: string]: any;
         id:number
         name:string,
@@ -29,6 +29,7 @@ const API = useRuntimeConfig().public.API;
         merchantId:number,
         products:[any]
     }]>(`${API}/merchant/verified`,{
+        lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
         }
@@ -124,7 +125,8 @@ const API = useRuntimeConfig().public.API;
                     <div class="flex justify-between items-center">
                         <div class="flex justify-start items-center">
                             <p class="font-bold p-4">Total of merchants: </p>
-                            <p class="font-bold">{{ (merchants!.length) ? merchants!.length : 0 }}</p>
+                            <div v-if="pending" class="h-5 rounded-md w-5 bg-gray-400"></div>
+                            <p v-else class="font-bold">{{ (merchants!.length) ? merchants!.length : 0 }}</p>
                         </div>
                     </div>
                     <table class="min-w-full divide-y divide-gray-200">
@@ -142,7 +144,12 @@ const API = useRuntimeConfig().public.API;
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200" v-for="merchant in merchants" :key="merchant.id">
-                            <tr>
+                            <tr class="animate-pulse" v-if="pending" v-for="i in Array.from({length:10})">
+                                <td class="px-6 py-4 whitespace-nowrap h-[81px]" v-for="i in Array.from({length:7})">
+                                    <div class="h-[50%] rounded-md w-full bg-gray-400"></div>
+                                </td>
+                            </tr>
+                            <tr v-else>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <p>{{ merchant.id}}</p>
                                 </td>

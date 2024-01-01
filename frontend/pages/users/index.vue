@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const API = useRuntimeConfig().public.API;
 const token = useCookie("token");
-const { data: users, refresh } = await useFetch<
+const { data: users,pending, refresh } = await useFetch<
   [
     {
       id: number;
@@ -12,6 +12,7 @@ const { data: users, refresh } = await useFetch<
     }
   ]
 >(`${API}/user?status=Active`, {
+  lazy:true,
   headers: {
     Authorization: `Bearer ${token.value}`,
   },
@@ -471,7 +472,8 @@ async function Ban() {
           <div class="flex justify-between items-center">
             <div class="flex justify-start items-center">
               <p class="font-bold p-4">Total of users:</p>
-              <p class="font-bold">{{ users!.length ? users!.length : 0 }}</p>
+              <p v-if="!pending" class="font-bold">{{ users!.length ? users!.length : 0 }}</p>
+              <div v-else class="h-5 rounded-md w-5 bg-gray-400"></div>
             </div>
             <div>
               <button
@@ -527,10 +529,17 @@ async function Ban() {
             </thead>
             <tbody
               class="bg-white divide-y divide-gray-200"
+            >
+              <tr class="animate-pulse" v-if="pending" v-for="i in Array.from({length:10})">
+                  <td class="px-6 py-4 whitespace-nowrap h-[81px]" v-for="i in Array.from({length:15})">
+                      <div class="h-[50%] rounded-md w-full bg-gray-400"></div>
+                  </td>
+              </tr>
+              <tr
+              v-if="!pending"
               v-for="user in users"
               :key="user.id"
-            >
-              <tr>
+              >
                 <td class="px-6 py-4 whitespace-nowrap">
                   <p>{{ user.id }}</p>
                 </td>
