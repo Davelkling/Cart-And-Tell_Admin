@@ -2,7 +2,10 @@
     const API = useRuntimeConfig().public.API;
     const token = useCookie('token');
     const path = useRoute().path;
+    const controller = new AbortController();
+    const signal = controller.signal;
     const {data:users,pending:pending1} = await useFetch(`${API}/user?status=Removed`,{
+        signal,
         lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
@@ -10,6 +13,7 @@
         key:path
     });
     const {data:banned,pending:pending2} = await useFetch(`${API}/user?status=Banned`,{
+        signal,
         lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
@@ -17,12 +21,18 @@
         key:path
     });
     const {data:merchants,pending:pending3} = await useFetch(`${API}/merchant?status=Removed`,{
+        signal,
         lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
         },
         key:path
     });
+    onBeforeRouteLeave((to,from) => {
+        if (pending1 || pending2 || pending3) {
+            controller.abort();
+        }
+    })
 </script>
 
 <template>
@@ -43,15 +53,15 @@
                     <div class="flex justify-between items-center w-full" v-else>
                         <div class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full">
                             <h1 class="text-2xl font-bold">Total Archived Users</h1>
-                            <h2 class="text-2xl font-bold">{{ users.length }}</h2>
+                            <h2 class="text-2xl font-bold">{{ users ? users.length : 0 }}</h2>
                         </div>
                         <div class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full">
                             <h1 class="text-2xl font-bold">Total Banned Users</h1>
-                            <h2 class="text-2xl font-bold">{{ banned.length }}</h2>
+                            <h2 class="text-2xl font-bold">{{ banned ? banned.length  : 0}}</h2>
                         </div>
                         <div class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full">
                             <h1 class="text-2xl font-bold">Total Archived Merchants</h1>
-                            <h2 class="text-2xl font-bold">{{ merchants.length }}</h2>
+                            <h2 class="text-2xl font-bold">{{ banned ? merchants.length : 0}}</h2>
                         </div>
                     </div>
                 </div>

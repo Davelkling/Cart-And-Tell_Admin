@@ -7,6 +7,8 @@ const API = useRuntimeConfig().public.API;
         NonExclusiveDistributor = "NonExclusiveDistributor"
     }
     const token = useCookie('token');
+    const controller = new AbortController();
+    const signal = controller.signal;
     const {data:merchants,refresh,pending} = await useFetch<[{
 [x: string]: any;
         id:number
@@ -29,6 +31,7 @@ const API = useRuntimeConfig().public.API;
         merchantId:number,
         products:[any]
     }]>(`${API}/merchant?status=Removed`,{
+        signal,
         lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
@@ -70,6 +73,10 @@ const API = useRuntimeConfig().public.API;
         refresh();
         isLoading.value = false;
     }
+    onBeforeRouteLeave((to,from) => {
+  if (pending) {
+    controller.abort();
+  }})
 </script>
 <template>
     <div class="bg-[#F8F9FD]">

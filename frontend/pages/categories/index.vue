@@ -1,7 +1,10 @@
 <script setup lang="ts">
-const API = useRuntimeConfig().public.API;
+    const API = useRuntimeConfig().public.API;
+    const controller = new AbortController();
+    const signal = controller.signal;
     const token = useCookie('token');
     const {data:categories,refresh, pending} = await useFetch<[{id:number,name:string,icon:string}]>(`${API}/category`,{
+        signal,
         lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
@@ -116,6 +119,11 @@ const API = useRuntimeConfig().public.API;
             closeModal(new Event('click'));
         }
     }
+    onBeforeRouteLeave((to,from) => {
+  if (pending) {
+    controller.abort();
+  }
+}) 
 </script>
 <template>
     <div class="bg-[#F8F9FD]">
@@ -200,7 +208,7 @@ const API = useRuntimeConfig().public.API;
                     <div class="flex justify-between items-center">
                         <div class="flex justify-start items-center">
                             <p class="font-bold p-4">Total of Categories: </p>
-                            <p v-if="!pending" class="font-bold">{{ (categories!.length) ? categories!.length : 0 }}</p>
+                            <p v-if="!pending" class="font-bold">{{ (categories) ? categories!.length : 0 }}</p>
                             <div v-else class="h-5 rounded-md w-5 bg-gray-400"></div>
                         </div>
                         <div>

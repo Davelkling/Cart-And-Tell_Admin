@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const API = useRuntimeConfig().public.API;
 const token = useCookie("token");
+const controller = new AbortController();
+const signal = controller.signal;
 const { data: users,pending, refresh } = await useFetch<
   [
     {
@@ -12,6 +14,7 @@ const { data: users,pending, refresh } = await useFetch<
     }
   ]
 >(`${API}/user?status=Active`, {
+  signal,
   lazy:true,
   headers: {
     Authorization: `Bearer ${token.value}`,
@@ -211,6 +214,10 @@ async function Ban() {
   isLoading.value = false;
   console.log(data);
 }
+onBeforeRouteLeave((to,from) => {
+  if (pending) {
+    controller.abort();
+  }})
 </script>
 <template>
   <div class="bg-[#F8F9FD]">
@@ -472,7 +479,7 @@ async function Ban() {
           <div class="flex justify-between items-center">
             <div class="flex justify-start items-center">
               <p class="font-bold p-4">Total of users:</p>
-              <p v-if="!pending" class="font-bold">{{ users!.length ? users!.length : 0 }}</p>
+              <p v-if="!pending" class="font-bold">{{ users ? users!.length : 0 }}</p>
               <div v-else class="h-5 rounded-md w-5 bg-gray-400"></div>
             </div>
             <div>

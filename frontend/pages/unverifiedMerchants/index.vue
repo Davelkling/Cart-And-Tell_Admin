@@ -6,6 +6,8 @@ const API = useRuntimeConfig().public.API;
         ExclusiveDistributor = "ExclusiveDistributor",
         NonExclusiveDistributor = "NonExclusiveDistributor"
     }
+    const controller = new AbortController();
+    const signal = controller.signal;
     const token = useCookie('token');
     const {data:merchants,refresh,pending} = await useFetch<[{
 [x: string]: any;
@@ -29,6 +31,7 @@ const API = useRuntimeConfig().public.API;
         merchantId:number,
         products:[any]
     }]>(`${API}/merchant?status=Pending`,{
+        signal,
         lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
@@ -123,6 +126,10 @@ const API = useRuntimeConfig().public.API;
         refresh();
         isLoading.value = false;
     }
+    onBeforeRouteLeave((to,from) => {
+  if (pending) {
+    controller.abort();
+  }})
 </script>
 <template>
     <div class="bg-[#F8F9FD]">
@@ -261,7 +268,7 @@ const API = useRuntimeConfig().public.API;
                         <div class="flex justify-start items-center">
                             <p class="font-bold p-4">Total of merchants: </p>
                             <div v-if="pending" class="h-5 rounded-md w-5 bg-gray-400"></div>
-                            <p v-else class="font-bold">{{ (merchants!.length) ? merchants!.length : 0 }}</p>
+                            <p v-else class="font-bold">{{ (merchants) ? merchants!.length : 0 }}</p>
                         </div>
                     </div>
                     <table class="min-w-full divide-y divide-gray-200">

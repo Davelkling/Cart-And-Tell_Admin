@@ -1,7 +1,10 @@
 <script setup lang="ts">
 const API = useRuntimeConfig().public.API;
     const token = useCookie('token');
+    const controller = new AbortController();
+    const signal = controller.signal;
     const {data:users,refresh,pending} = await useFetch<[{id:number,email:string,password:string,isMerchant:boolean,merchant:null|{}}]>(`${API}/user?status=Banned`,{
+        signal,
         lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`

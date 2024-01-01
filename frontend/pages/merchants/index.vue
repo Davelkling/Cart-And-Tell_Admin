@@ -6,6 +6,8 @@ const API = useRuntimeConfig().public.API;
         ExclusiveDistributor = "ExclusiveDistributor",
         NonExclusiveDistributor = "NonExclusiveDistributor"
     }
+    const controller = new AbortController();
+    const signal = controller.signal;
     const token = useCookie('token');
     const {data:merchants,refresh,pending} = await useFetch<[{
         id:number
@@ -28,6 +30,7 @@ const API = useRuntimeConfig().public.API;
         userId:number,
         products:[any]
     }]>(`${API}/merchant`,{
+        signal,
         lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
@@ -228,6 +231,10 @@ const API = useRuntimeConfig().public.API;
         }
         refresh();
     }
+    onBeforeRouteLeave((to,from) => {
+  if (pending) {
+    controller.abort();
+  }})
 </script>
 <template>
     <div class="bg-[#F8F9FD] w-[100vw] ">
@@ -429,7 +436,7 @@ const API = useRuntimeConfig().public.API;
                             <div class="flex justify-start items-center">
                                 <p class="font-bold p-4">Total of merchants: </p>
                                 <div v-if="pending" class="h-5 rounded-md w-5 bg-gray-400"></div>
-                                <p v-else class="font-bold">{{ (merchants!.length) ? merchants!.length : 0 }}</p>
+                                <p v-else class="font-bold">{{ (merchants) ? merchants!.length : 0 }}</p>
                             </div>
                             <div>
                                 <button @click="openModal" value="create" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Add merchants</button>
