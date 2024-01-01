@@ -153,6 +153,10 @@ const API = useRuntimeConfig().public.API;
         isLoading.value = false;
         console.log(data);
     }
+    onBeforeRouteLeave((to,from) => {
+  if (pending) {
+    controller.abort();
+  }})
 </script>
 <template>
     <div class="bg-[#F8F9FD]">
@@ -254,7 +258,7 @@ const API = useRuntimeConfig().public.API;
                     <div class="flex justify-between items-center">
                         <div class="flex justify-start items-center">
                             <p class="font-bold p-4">Total of users: </p>
-                            <div v-if="pending" class="h-5 rounded-md w-5 bg-gray-400"></div>
+                            <div v-if="pending" class="h-5 rounded-md w-5 bg-gray-400 animate-pulse"></div>
                             <p v-else class="font-bold">{{ (users!.length) ? users!.length : 0 }}</p>
                         </div>
                         <div>

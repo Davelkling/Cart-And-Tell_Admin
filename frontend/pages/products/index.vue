@@ -249,7 +249,7 @@ const API = useRuntimeConfig().public.API;
                     <div class="flex justify-between items-center">
                         <div class="flex justify-start items-center">
                             <p class="font-bold p-4">Total of products: </p>
-                            <div v-if="pending" class="h-5 rounded-md w-5 bg-gray-400"></div>
+                            <div v-if="pending" class="h-5 rounded-md w-5 bg-gray-400 animate-pulse"></div>
                             <p v-else class="font-bold">{{ (products) ? products!.length : 0 }}</p>
                         </div>
                         <div>

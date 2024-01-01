@@ -209,7 +209,7 @@
                         <div class="flex justify-start items-center">
                             <p class="font-bold p-4">Total of Categories: </p>
                             <p v-if="!pending" class="font-bold">{{ (categories) ? categories!.length : 0 }}</p>
-                            <div v-else class="h-5 rounded-md w-5 bg-gray-400"></div>
+                            <div v-else class="h-5 rounded-md w-5 bg-gray-400 animate-pulse"></div>
                         </div>
                         <div>
                             <button @click="openModal" value="create" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Add Category</button>
