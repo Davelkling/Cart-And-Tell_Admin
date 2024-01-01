@@ -1,16 +1,18 @@
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtPlugin(async () => {
+    // Improved Efficiency by only validating token once
     const token = useCookie('token');
     const { loggedIn } = useUserObj().value;
-    if (!loggedIn && !token) {
-        console.log("this is called");
+    const path = useRoute().path;
+    console.log("plugin")
+    if (!loggedIn && !token.value) {
         useUserObj().value.loggedIn = false;
-        return navigateTo('/login');
+        return;
     }
-    if (to.path !== '/login') {
+    if (path !== '/login') {
         const API = useRuntimeConfig().public.API;
         if (token.value === undefined) {
             useUserObj().value.loggedIn = false;
-            return navigateTo('/login');
+            return;
         }
         // Verify token
         let isInvalidToken = null;
@@ -31,7 +33,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
             const token = useCookie('token');
             token.value = null;
             useUserObj().value.loggedIn = false;
-            return navigateTo('/login', { redirectCode: 301 });
+            return;
         }
         if (result) {
             const userObj = useUserObj();

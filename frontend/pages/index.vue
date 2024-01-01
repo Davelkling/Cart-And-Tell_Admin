@@ -4,6 +4,7 @@ const token = useCookie("token");
 const path = useRoute().path
 const { data: users, pending: pending1 } = await useFetch(`${API}/user`, {
   lazy: true,
+  server:false,
   headers: {
     Authorization: `Bearer ${token.value}`,
   },
@@ -13,6 +14,7 @@ const { data: categories, pending: pending2 } = await useFetch(
   `${API}/category`,
   {
     lazy: true,
+    server:false,
     headers: {
       Authorization: `Bearer ${token.value}`,
     },
@@ -23,6 +25,7 @@ const { data: merchants, pending: pending3 } = await useFetch(
   `${API}/merchant`,
   {
     lazy: true,
+    server:false,
     headers: {
       Authorization: `Bearer ${token.value}`,
     },
@@ -33,6 +36,7 @@ const { data: products, pending: pending4 } = await useFetch(
   `${API}/products`,
   {
     lazy: true,
+    server:false,
     headers: {
       Authorization: `Bearer ${token.value}`,
     },
