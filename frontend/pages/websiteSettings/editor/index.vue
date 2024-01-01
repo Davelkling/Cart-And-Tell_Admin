@@ -9,6 +9,7 @@ const API = useRuntimeConfig().public.API;
 const token = useCookie("token").value;
 const TINYMCE_API_KEY = useRuntimeConfig().public.TINYMCE_API_KEY;
 const route = useRoute();
+const controllerRef = ref(new AbortController());
 // Component Specific States
 const content = ref("");
 const configured = ref(false);
@@ -21,12 +22,15 @@ let type = route.query.type;
 
 async function fetchData() {
   const result = (await $fetch<CMS>(`${API}/cms/${type}`, {
+    signal:controllerRef.value.signal,
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }).catch((error) => {
     configured.value = false;
-    alert(error.data.message);
+    // if (error.data) {
+      alert(error.data.message);
+    // }
   })) as CMS;
   if (result) {
     content.value = (result as { html: string }).html;
@@ -46,6 +50,10 @@ async function fetchData() {
 await fetchData();
 // Resets state on each redirect
 onBeforeRouteUpdate((to, from) => {
+  if (!dataLoaded.value) {
+    controllerRef.value.abort();
+    controllerRef.value = new AbortController();
+  }
   if (editing.value) {
     if (
       confirm(
@@ -285,7 +293,4 @@ async function updateCMS() {
 </template>
 
 <style scoped>
-.tox.tinymce {
-  @apply w-[1216px] bg-red-500;
-}
 </style>
