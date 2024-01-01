@@ -538,7 +538,7 @@ onBeforeRouteLeave((to,from) => {
               class="bg-white divide-y divide-gray-200"
             >
               <tr class="animate-pulse" v-if="pending" v-for="i in Array.from({length:10})">
-                  <td class="px-6 py-4 whitespace-nowrap h-[81px]" v-for="i in Array.from({length:15})">
+                  <td class="px-6 py-4 whitespace-nowrap h-[81px]" v-for="i in Array.from({length:6})">
                       <div class="h-[50%] rounded-md w-full bg-gray-400"></div>
                   </td>
               </tr>
