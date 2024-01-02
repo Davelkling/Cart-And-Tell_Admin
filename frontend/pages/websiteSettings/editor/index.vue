@@ -205,9 +205,15 @@ async function updateCMS() {
           >
             <p class="font-bold text-3xl">Preview</p>
             <div
-              v-html="data.html"
-              class="max-w-[1216px] w-full border-2 h-full p-4 rounded-md"
-            ></div>
+            class="max-w-[1216px] w-full border-2 h-full p-4 rounded-md"
+            >
+            <div
+            v-html="data.html"
+            class="no-more-tailwind"
+            >
+
+            </div>
+          </div>
             <button
               @click="editMode = true"
               class="max-w-[1216px] w-full px-4 py-2 font-bold text-2xl border-2 rounded-md mt-5 border-[#5B8ED8] bg-[#5B8ED8] text-white hover:bg-white hover:text-black active:bg-[#5B8ED8] active:text-[#5B8ED8]"
@@ -233,10 +239,10 @@ async function updateCMS() {
                 :api-key="TINYMCE_API_KEY"
                 :init="{
                   min_height: 1000,
-                  plugins:
-                    'lists link image table code help wordcount autoresize',
-                  toolbar:
-                    'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link image',
+                  selector: 'textarea#open-source-plugins',
+                  menubar: 'file edit view insert format tools table help',
+                  plugins: 'preview importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount help charmap quickbars emoticons accordion',
+                  toolbar: 'undo redo | accordion accordionremove | blocks fontfamily fontsize | bold italic underline strikethrough | align numlist bullist | link image | table media | lineheight outdent indent| forecolor backcolor removeformat | charmap emoticons | code fullscreen preview | save print | pagebreak anchor codesample | ltr rtl',
                   a11y_advanced_options: true,
                   file_picker_callback: handleFilePicker,
                   setup: function (editor:any) {
@@ -292,5 +298,3 @@ async function updateCMS() {
   </div>
 </template>
 
-<style scoped>
-</style>

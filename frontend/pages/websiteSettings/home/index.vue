@@ -16,11 +16,7 @@ const token = useCookie("token");
         <div
           class="bg-white rounded-3xl w-full p-4 text-center h-full mt-4 flex flex-col"
         >
-          <p class="font-bold text-3xl p-4">Website Preview</p>
-          <embed
-            src="https://cart-and-tell.vercel.app/"
-            class="h-[calc(100%-150px)]"
-          />
+          <p class="font-bold text-3xl p-4">Website Home - WIP</p>
         </div>
       </div>
       <!-- <SettingBar/> -->
