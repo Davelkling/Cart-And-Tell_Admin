@@ -6,8 +6,10 @@ const API = useRuntimeConfig().public.API;
         ExclusiveDistributor = "ExclusiveDistributor",
         NonExclusiveDistributor = "NonExclusiveDistributor"
     }
+    const controller = new AbortController();
+    const signal = controller.signal;
     const token = useCookie('token');
-    const {data:merchants,refresh} = await useFetch<[{
+    const {data:merchants,refresh,pending} = await useFetch<[{
         id:number
         name:string,
         website:string,
@@ -28,6 +30,8 @@ const API = useRuntimeConfig().public.API;
         userId:number,
         products:[any]
     }]>(`${API}/merchant`,{
+        signal,
+        lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
         }
@@ -227,18 +231,22 @@ const API = useRuntimeConfig().public.API;
         }
         refresh();
     }
+    onBeforeRouteLeave((to,from) => {
+  if (pending) {
+    controller.abort();
+  }})
 </script>
 <template>
     <div class="bg-[#F8F9FD] w-[100vw] ">
         <div class="flex justify-start">
             <SideBar/>
-            <div class="flex-1 shrink-0 h-[100svh] overflow-scroll relative mr-[78px] flex">
-                <div>
-                    <div class="h-[80px] overflow-hidden bg-[#F8F9FD]">
-                        <div class=" bg-white w-[calc(100svw-400px)] p-4 text-center fixed">
-                            <h1 class="text-5xl font-black ">merchants</h1>
+            <div class="flex-1 shrink-0 h-[100svh] overflow-scroll relative flex ">
+                    <div class="h-[80px]">
+                        <div class=" bg-[#F8F9FD] w-[calc(100svw-400px)] p-4 text-center fixed">
+                            <div class="bg-white rounded-3xl w-full p-4 text-center">
+                                <h1 class="text-5xl font-black">merchants</h1>
+                            </div>
                         </div>
-                    </div>
                     <div class="bg-white rounded-3xl w-full p-4 h-full m-4 mt-8">
                         <!-- Add Modal -->
                         <div v-if="createModal" class="absolute h-full w-full bg-transparent flex left-0 p-6 justify-center items-center">
@@ -424,10 +432,11 @@ const API = useRuntimeConfig().public.API;
                                 </div>
                             </div> 
                         </div>
-                        <div class="flex justify-between items-center">
+                        <div class="flex justify-between items-center mt-[81px]">
                             <div class="flex justify-start items-center">
                                 <p class="font-bold p-4">Total of merchants: </p>
-                                <p class="font-bold">{{ (merchants!.length) ? merchants!.length : 0 }}</p>
+                                <div v-if="pending" class="h-5 rounded-md w-5 bg-gray-400 animate-pulse"></div>
+                                <p v-else class="font-bold">{{ (merchants) ? merchants!.length : 0 }}</p>
                             </div>
                             <div>
                                 <button @click="openModal" value="create" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Add merchants</button>
@@ -451,8 +460,13 @@ const API = useRuntimeConfig().public.API;
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200" v-for="merchant in merchants" :key="merchant.id">
-                                <tr>
+                            <tbody class="bg-white divide-y divide-gray-200" >
+                                <tr class="animate-pulse" v-if="pending" v-for="i in Array.from({length:10})">
+                                    <td class="px-6 py-4 whitespace-nowrap h-[81px]" v-for="i in Array.from({length:13})">
+                                        <div class="h-[50%] rounded-md w-full bg-gray-400"></div>
+                                    </td>
+                                </tr>
+                                <tr v-if="!pending"  v-for="merchant in merchants" :key="merchant.id">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <p>{{ merchant.id}}</p>
                                     </td>
@@ -485,7 +499,8 @@ const API = useRuntimeConfig().public.API;
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <p>{{ useDateFormat(merchant.merchantStartValidity,"YYYY-MM-DD").value }}</p>
-                                    </td>                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    </td>                                    
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         <p>{{ useDateFormat(merchant.merchantEndValidity,"YYYY-MM-DD").value }}</p>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium">

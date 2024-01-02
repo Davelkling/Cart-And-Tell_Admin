@@ -1,9 +1,13 @@
 <script setup lang="ts">
 const API = useRuntimeConfig().public.API;
     const token = useCookie('token');
-    const {data:products,refresh} = await useFetch<[{
+    const controller = new AbortController();
+    const signal = controller.signal;
+    const {data:products,refresh,pending} = await useFetch<[{
 [x: string]: any;id:number,name:string,image:string,merchantId:number,amount:number
 }]>(`${API}/products`,{
+    signal,
+    lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
         }
@@ -133,6 +137,10 @@ const API = useRuntimeConfig().public.API;
             closeModal(new Event('click'));
         }
     }
+    onBeforeRouteLeave((to,from) => {
+  if (pending) {
+    controller.abort();
+  }})
 </script>
 <template>
     <div class="bg-[#F8F9FD]">
@@ -241,7 +249,8 @@ const API = useRuntimeConfig().public.API;
                     <div class="flex justify-between items-center">
                         <div class="flex justify-start items-center">
                             <p class="font-bold p-4">Total of products: </p>
-                            <p class="font-bold">{{ (products!.length) ? products!.length : 0 }}</p>
+                            <div v-if="pending" class="h-5 rounded-md w-5 bg-gray-400 animate-pulse"></div>
+                            <p v-else class="font-bold">{{ (products) ? products!.length : 0 }}</p>
                         </div>
                         <div>
                             <button @click="openModal" value="create" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Add product</button>
@@ -259,8 +268,13 @@ const API = useRuntimeConfig().public.API;
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200" v-for="product in products" :key="product.id">
-                            <tr>
+                        <tbody class="bg-white divide-y divide-gray-200" >
+                            <tr class="animate-pulse" v-if="pending" v-for="i in Array.from({length:10})">
+                                <td class="px-6 py-4 whitespace-nowrap h-[81px]" v-for="i in Array.from({length:7})">
+                                    <div class="h-[50%] rounded-md w-full bg-gray-400"></div>
+                                </td>
+                            </tr>
+                            <tr v-else v-for="product in products" :key="product.id">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <p>{{ product.id}}</p>
                                 </td>

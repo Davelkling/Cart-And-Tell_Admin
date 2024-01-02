@@ -1,7 +1,11 @@
 <script setup lang="ts">
-const API = useRuntimeConfig().public.API;
+    const API = useRuntimeConfig().public.API;
+    const controller = new AbortController();
+    const signal = controller.signal;
     const token = useCookie('token');
-    const {data:categories,refresh} = await useFetch<[{id:number,name:string,icon:string}]>(`${API}/category`,{
+    const {data:categories,refresh, pending} = await useFetch<[{id:number,name:string,icon:string}]>(`${API}/category`,{
+        signal,
+        lazy:true,
         headers: {
             'Authorization': `Bearer ${token.value}`
         }
@@ -115,6 +119,11 @@ const API = useRuntimeConfig().public.API;
             closeModal(new Event('click'));
         }
     }
+    onBeforeRouteLeave((to,from) => {
+  if (pending) {
+    controller.abort();
+  }
+}) 
 </script>
 <template>
     <div class="bg-[#F8F9FD]">
@@ -122,7 +131,7 @@ const API = useRuntimeConfig().public.API;
             <SideBar/>
             <div class="p-4 w-full h-[100svh] overflow-x-scroll relative">
                 <div class="bg-white rounded-3xl w-full p-4 text-center">
-                    <h1 class="text-5xl font-black">Categories</h1>
+                    <h1 class="text-5xl font-black">categories</h1>
                 </div>
                 <div class="bg-white rounded-3xl w-full p-4 h-full mt-4">
                     <!-- Add Modal -->
@@ -199,7 +208,8 @@ const API = useRuntimeConfig().public.API;
                     <div class="flex justify-between items-center">
                         <div class="flex justify-start items-center">
                             <p class="font-bold p-4">Total of Categories: </p>
-                            <p class="font-bold">{{ (categories!.length) ? categories!.length : 0 }}</p>
+                            <p v-if="!pending" class="font-bold">{{ (categories) ? categories!.length : 0 }}</p>
+                            <div v-else class="h-5 rounded-md w-5 bg-gray-400 animate-pulse"></div>
                         </div>
                         <div>
                             <button @click="openModal" value="create" type="button" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition">Add Category</button>
@@ -214,8 +224,13 @@ const API = useRuntimeConfig().public.API;
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200" v-for="category in categories" :key="category.id">
-                            <tr>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr class="animate-pulse" v-if="pending" v-for="i in Array.from({length:10})">
+                                <td class="px-6 py-4 whitespace-nowrap h-[81px]" v-for="i in Array.from({length:4})">
+                                    <div class="h-[50%] rounded-md w-full bg-gray-400"></div>
+                                </td>
+                            </tr>
+                            <tr v-if="!pending" v-for="category in categories" :key="category.id">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <p>{{ category.id}}</p>
                                 </td>

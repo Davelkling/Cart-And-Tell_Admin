@@ -1,8 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  routeRules: {
-    "/websiteSettings/editor": { ssr: false }
-  },
+  // routeRules: {
+  //   "/websiteSettings/editor": { ssr: false }
+  // },
+  ssr: false,
   devtools: { enabled: true },
   runtimeConfig: {
     public: {
