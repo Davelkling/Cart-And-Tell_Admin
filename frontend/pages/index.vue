@@ -7,22 +7,22 @@ const signal = controller.signal;
 const { data: users, pending: pending1 } = await useFetch(`${API}/user`, {
   signal,
   lazy: true,
-  server:false,
+  server: false,
   headers: {
     Authorization: `Bearer ${token.value}`,
   },
-  key:path
+  key: path,
 });
 const { data: categories, pending: pending2 } = await useFetch(
   `${API}/category`,
   {
     signal,
     lazy: true,
-    server:false,
+    server: false,
     headers: {
       Authorization: `Bearer ${token.value}`,
     },
-    key:path
+    key: path,
   }
 );
 const { data: merchants, pending: pending3 } = await useFetch(
@@ -30,11 +30,11 @@ const { data: merchants, pending: pending3 } = await useFetch(
   {
     signal,
     lazy: true,
-    server:false,
+    server: false,
     headers: {
       Authorization: `Bearer ${token.value}`,
     },
-    key:path
+    key: path,
   }
 );
 const { data: products, pending: pending4 } = await useFetch(
@@ -42,18 +42,18 @@ const { data: products, pending: pending4 } = await useFetch(
   {
     signal,
     lazy: true,
-    server:false,
+    server: false,
     headers: {
       Authorization: `Bearer ${token.value}`,
     },
-    key:path
+    key: path,
   }
 );
-onBeforeRouteLeave((to,from) => {
+onBeforeRouteLeave((to, from) => {
   if (pending1 || pending2 || pendin3 || pending4) {
     controller.abort();
   }
-}) 
+});
 </script>
 
 <template>
@@ -67,36 +67,54 @@ onBeforeRouteLeave((to,from) => {
           <h1 class="text-5xl font-black">Overview</h1>
         </div>
         <div class="bg-white rounded-3xl w-full p-4 text-center h-full mt-4">
-          <div class="flex justify-between items-center w-full" v-if="pending1 && pending2 && pending3">
-                        <div class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full h-[96px] animate-pulse" v-for="i in Array.from({length:4})">
-                            <div class="h-5 w-80 bg-gray-500 mb-4 rounded-md"></div>
-                            <div class="h-5 w-12 bg-gray-500 rounded-md"></div>
-                        </div>
-                    </div>
+          <div
+            class="flex justify-between items-center w-full"
+            v-if="pending1 && pending2 && pending3"
+          >
+            <div
+              class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full h-[96px] animate-pulse"
+              v-for="i in Array.from({ length: 4 })"
+            >
+              <div class="h-5 w-80 bg-gray-500 mb-4 rounded-md"></div>
+              <div class="h-5 w-12 bg-gray-500 rounded-md"></div>
+            </div>
+          </div>
           <div class="flex justify-between items-center w-full" v-else>
             <div
               class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full"
             >
               <h1 class="text-2xl font-bold">Total Users</h1>
-              <h2 class="text-2xl font-bold">{{ users ? users.length : 0}}</h2>
+              <h2 class="text-2xl font-bold">{{ users ? users.length : 0 }}</h2>
             </div>
             <div
               class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full"
             >
               <h1 class="text-2xl font-bold">Total Categories</h1>
-              <h2 class="text-2xl font-bold">{{ categories ? categories.length :0 }}</h2>
+              <h2 class="text-2xl font-bold">
+                {{ categories ? categories.length : 0 }}
+              </h2>
             </div>
             <div
               class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full"
             >
               <h1 class="text-2xl font-bold">Total Merchants</h1>
-              <h2 class="text-2xl font-bold">{{ merchants ? merchants.length : 0 }}</h2>
+              <h2 class="text-2xl font-bold">
+                {{ merchants ? merchants.length : 0 }}
+              </h2>
             </div>
             <div
               class="flex flex-col justify-center items-center shadow-sm p-4 rounded-md w-full"
             >
               <h1 class="text-2xl font-bold">Total Products</h1>
-              <h2 class="text-2xl font-bold">{{ products ? products.length : 0}}</h2>
+              <h2 class="text-2xl font-bold">
+                {{ products ? products.length : 0 }}
+              </h2>
+            </div>
+          </div>
+          <div class="h-full">
+            <img src="/googleanalytics.png" class="h-36" alt="" />
+            <div class="h-[400px] flex justify-center items-center">
+              <p class="font-bold text-gray-500">Please Provide GTAG ID</p>
             </div>
           </div>
         </div>

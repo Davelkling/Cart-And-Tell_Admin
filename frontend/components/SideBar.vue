@@ -79,6 +79,14 @@ function logout() {
           <h2 class="font-bold text-2xl">Verified Merchants</h2>
         </div>
       </NuxtLink>
+      <NuxtLink to="payments">
+        <div class="flex justify-start items-start gap-4 py-5 px-12">
+          <span class="material-symbols-outlined font-black text-3xl"
+            >money</span
+          >
+          <h2 class="font-bold text-2xl">Payments</h2>
+        </div>
+      </NuxtLink>
       <NuxtLink to="archives">
         <div class="flex justify-start items-start gap-4 py-5 px-12">
           <span class="material-symbols-outlined font-black text-3xl"

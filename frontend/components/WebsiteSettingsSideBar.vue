@@ -60,11 +60,11 @@ function logout() {
       <div class="px-12">
         <p class="font-black text-center text-2xl py-4">Website CMS</p>
       </div>
-      <NuxtLink to="/websiteSettings/home">
+      <!-- <NuxtLink to="/websiteSettings/home">
         <div class="link flex justify-start items-start gap-4 py-4 px-12">
           <h2 class="px-12 font-bold text-xl">Home</h2>
         </div>
-      </NuxtLink>
+      </NuxtLink> -->
       <NuxtLink to="/websiteSettings/editor?type=AboutUs">
         <div
           :class="getBgClass('AboutUs')"
