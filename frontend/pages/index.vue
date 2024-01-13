@@ -114,7 +114,42 @@ onBeforeRouteLeave((to, from) => {
           <div class="h-full">
             <img src="/googleanalytics.png" class="h-36" alt="" />
             <div class="h-[400px] flex justify-center items-center">
-              <p class="font-bold text-gray-500">Please Provide GTAG ID</p>
+              <div class="bg-white rounded-lg shadow-md p-6">
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-4">
+                  <h2 class="text-xl font-semibold">Analytics Overview</h2>
+                  <span class="text-gray-500">Last 7 days</span>
+                </div>
+
+                <!-- Metrics -->
+                <div
+                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+                >
+                  <!-- Metric Card 1 -->
+                  <div class="bg-blue-500 text-white rounded-md p-4">
+                    <p class="text-sm uppercase font-semibold">Users</p>
+                    <p class="text-lg font-bold">6</p>
+                  </div>
+
+                  <!-- Metric Card 2 -->
+                  <div class="bg-green-500 text-white rounded-md p-4">
+                    <p class="text-sm uppercase font-semibold">Sessions</p>
+                    <p class="text-lg font-bold">12</p>
+                  </div>
+
+                  <!-- Metric Card 3 -->
+                  <div class="bg-yellow-500 text-white rounded-md p-4">
+                    <p class="text-sm uppercase font-semibold">Pageviews</p>
+                    <p class="text-lg font-bold">6</p>
+                  </div>
+
+                  <!-- Metric Card 4 -->
+                  <div class="bg-red-500 text-white rounded-md p-4">
+                    <p class="text-sm uppercase font-semibold">Bounce Rate</p>
+                    <p class="text-lg font-bold">0%</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
