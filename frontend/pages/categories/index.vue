@@ -105,7 +105,6 @@
         isLoading.value = false;
     }
     async function Delete() {
-        console.log(selectedId);
         const data= await $fetch<{message:string}>(`${API}/category/${selectedId.value}`,{
             method: 'DELETE',
             headers: {

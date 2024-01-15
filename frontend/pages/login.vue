@@ -25,7 +25,6 @@ async function handler() {
   isLoading.value = true;
   errorMessage.value = "";
   const result: loginFetchData = await login(formData.email, formData.password);
-  console.log(result);
   if (result.access_token) {
     const token = useCookie("token");
     token.value = result.access_token;
@@ -41,7 +40,6 @@ async function handler() {
       },
       method: "GET",
     }).catch((error) => {
-      console.log("This is called");
       errorMessage.value = "User not Authorized";
     });
     if (response) {

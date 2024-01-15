@@ -3,7 +3,11 @@ const API = useRuntimeConfig().public.API;
 const token = useCookie("token");
 const controller = new AbortController();
 const signal = controller.signal;
-const { data: users,pending, refresh } = await useFetch<
+const {
+  data: users,
+  pending,
+  refresh,
+} = await useFetch<
   [
     {
       id: number;
@@ -15,7 +19,7 @@ const { data: users,pending, refresh } = await useFetch<
   ]
 >(`${API}/user?status=Active`, {
   signal,
-  lazy:true,
+  lazy: true,
   headers: {
     Authorization: `Bearer ${token.value}`,
   },
@@ -78,7 +82,6 @@ async function create() {
   isLoading.value = true;
   let isError = false;
   const formDataCreate = JSON.stringify(formData);
-  console.log(formData.isMerchant);
   const token = useCookie("token");
   const data = await $fetch<{ message: string }>(`${API}/user`, {
     method: "POST",
@@ -134,7 +137,6 @@ async function update() {
   isLoading.value = false;
 }
 async function Delete() {
-  console.log(selectedId);
   const data = await $fetch<{ message: string }>(
     `${API}/user/${selectedId.value}`,
     {
@@ -152,7 +154,6 @@ async function Delete() {
   refresh();
 }
 async function Archive() {
-  console.log(selectedId.value);
   isLoading.value = true;
   let isError = false;
   const formDataUpdate: { [any: string]: string | boolean } = {
@@ -180,10 +181,8 @@ async function Archive() {
   }
   refresh();
   isLoading.value = false;
-  console.log(data);
 }
 async function Ban() {
-  console.log(selectedId.value);
   isLoading.value = true;
   let isError = false;
   const formDataUpdate: { [any: string]: string | boolean } = {
@@ -212,12 +211,12 @@ async function Ban() {
   refresh();
   closeModal(new Event("click"));
   isLoading.value = false;
-  console.log(data);
 }
-onBeforeRouteLeave((to,from) => {
+onBeforeRouteLeave((to, from) => {
   if (pending) {
     controller.abort();
-  }})
+  }
+});
 </script>
 <template>
   <div class="bg-[#F8F9FD]">
@@ -479,8 +478,13 @@ onBeforeRouteLeave((to,from) => {
           <div class="flex justify-between items-center">
             <div class="flex justify-start items-center">
               <p class="font-bold p-4">Total of users:</p>
-              <p v-if="!pending" class="font-bold">{{ users ? users!.length : 0 }}</p>
-              <div v-else class="h-5 rounded-md w-5 bg-gray-400 animate-pulse"></div>
+              <p v-if="!pending" class="font-bold">
+                {{ users ? users!.length : 0 }}
+              </p>
+              <div
+                v-else
+                class="h-5 rounded-md w-5 bg-gray-400 animate-pulse"
+              ></div>
             </div>
             <div>
               <button
@@ -534,19 +538,20 @@ onBeforeRouteLeave((to,from) => {
                 </th>
               </tr>
             </thead>
-            <tbody
-              class="bg-white divide-y divide-gray-200"
-            >
-              <tr class="animate-pulse" v-if="pending" v-for="i in Array.from({length:10})">
-                  <td class="px-6 py-4 whitespace-nowrap h-[81px]" v-for="i in Array.from({length:6})">
-                      <div class="h-[50%] rounded-md w-full bg-gray-400"></div>
-                  </td>
-              </tr>
+            <tbody class="bg-white divide-y divide-gray-200">
               <tr
-              v-if="!pending"
-              v-for="user in users"
-              :key="user.id"
+                class="animate-pulse"
+                v-if="pending"
+                v-for="i in Array.from({ length: 10 })"
               >
+                <td
+                  class="px-6 py-4 whitespace-nowrap h-[81px]"
+                  v-for="i in Array.from({ length: 6 })"
+                >
+                  <div class="h-[50%] rounded-md w-full bg-gray-400"></div>
+                </td>
+              </tr>
+              <tr v-if="!pending" v-for="user in users" :key="user.id">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <p>{{ user.id }}</p>
                 </td>

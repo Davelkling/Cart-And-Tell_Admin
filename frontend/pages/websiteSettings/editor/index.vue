@@ -22,14 +22,14 @@ let type = route.query.type;
 
 async function fetchData() {
   const result = (await $fetch<CMS>(`${API}/cms/${type}`, {
-    signal:controllerRef.value.signal,
+    signal: controllerRef.value.signal,
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }).catch((error) => {
     configured.value = false;
     // if (error.data) {
-      alert(error.data.message);
+    alert(error.data.message);
     // }
   })) as CMS;
   if (result) {
@@ -39,14 +39,7 @@ async function fetchData() {
   dataLoaded.value = true;
   data.value = result;
 }
-// watch(
-//   () => dataLoaded.value,
-//   () => {
-//     if (dataLoaded.value) {
-//       console.log(data.value);
-//     }
-//   }
-// );
+
 await fetchData();
 // Resets state on each redirect
 onBeforeRouteUpdate((to, from) => {
@@ -204,16 +197,9 @@ async function updateCMS() {
             class="flex-1 pb-4 flex flex-col items-center"
           >
             <p class="font-bold text-3xl">Preview</p>
-            <div
-            class="max-w-[1216px] w-full border-2 h-full p-4 rounded-md"
-            >
-            <div
-            v-html="data.html"
-            class="no-more-tailwind"
-            >
-
+            <div class="max-w-[1216px] w-full border-2 h-full p-4 rounded-md">
+              <div v-html="data.html" class="no-more-tailwind"></div>
             </div>
-          </div>
             <button
               @click="editMode = true"
               class="max-w-[1216px] w-full px-4 py-2 font-bold text-2xl border-2 rounded-md mt-5 border-[#5B8ED8] bg-[#5B8ED8] text-white hover:bg-white hover:text-black active:bg-[#5B8ED8] active:text-[#5B8ED8]"
@@ -297,4 +283,3 @@ async function updateCMS() {
     </div>
   </div>
 </template>
-

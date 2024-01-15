@@ -217,7 +217,6 @@ const API = useRuntimeConfig().public.API;
         isLoading.value = false;
     }
     async function Delete() {
-        console.log(selectedId);
         const data= await $fetch<{message:string}>(`${API}/merchant/${selectedId.value}`,{
             method: 'DELETE',
             headers: {

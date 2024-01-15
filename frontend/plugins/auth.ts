@@ -3,7 +3,6 @@ export default defineNuxtPlugin(async () => {
     const token = useCookie('token');
     const { loggedIn } = useUserObj().value;
     const path = useRoute().path;
-    console.log("plugin")
     if (!loggedIn && !token.value) {
         useUserObj().value.loggedIn = false;
         return;
