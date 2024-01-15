@@ -1,6 +1,7 @@
 import { BetaAnalyticsDataClient } from '@google-analytics/data';
 export default defineEventHandler(async (event) => {
-    const { GA_PropertyID, GA_Service_Email, GA_Service_Private_Key } = useRuntimeConfig().public
+    const { GA_PropertyID, GA_Service_Email, GA_Service_Private_Key } = useRuntimeConfig().public;
+    console.log({ GA_PropertyID, GA_Service_Email, GA_Service_Private_Key });
     const analyticsDataClient = new BetaAnalyticsDataClient({ credentials: { client_email: GA_Service_Email, private_key: GA_Service_Private_Key } });
     const [response] = await analyticsDataClient.runReport({
         property: `properties/${GA_PropertyID}`,
