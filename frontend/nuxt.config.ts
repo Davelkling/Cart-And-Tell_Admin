@@ -8,8 +8,11 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       API: process.env.API,
-      TINYMCE_API_KEY: process.env.TINYMCE_API_KEY
-    }
+      TINYMCE_API_KEY: process.env.TINYMCE_API_KEY,
+      GA_PropertyID: process.env.GA_PropertyID,
+      GA_Service_Email: process.env.GA_Service_Email,
+      GA_Service_Private_Key: process.env.GA_Service_Private_Key,
+    },
   },
   app: {
     head: {

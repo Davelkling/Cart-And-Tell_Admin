@@ -19,8 +19,11 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@google-analytics/data": "^4.3.0",
     "@tinymce/tinymce-vue": "^5.1.1",
     "@vueuse/core": "^10.7.0",
-    "date-fns": "^2.30.0"
+    "date-fns": "^2.30.0",
+    "google-gax": "^4.1.0",
+    "googleapis": "^130.0.0"
   }
 }
