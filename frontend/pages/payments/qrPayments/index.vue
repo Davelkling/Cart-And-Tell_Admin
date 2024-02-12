@@ -12,7 +12,11 @@ const {
     {
       id: number;
       merchantId: number;
-      bankReferenceNo: string;
+      referenceID: string;
+      proofImage: string;
+      qrCode: {
+        qrName: string;
+      };
       status: string;
       merchant: {
         id: number;
@@ -21,7 +25,7 @@ const {
       };
     }
   ]
->(`${API}/ocbc-bankDetails/merchantRegistrationTransaction`, {
+>(`${API}/cartntell-qrs-payment`, {
   signal,
   lazy: true,
   headers: {
@@ -39,7 +43,7 @@ async function confirm(e: Event) {
   confirmLoading.value = true;
   const id = (e.target as HTMLElement).id;
   const response = await fetch(
-    `${API}/ocbc-bankDetails/confirmMerchantPayment/${id}`,
+    `${API}/cartntell-qrs-payment/confirmMerchantPayment/${id}`,
     {
       method: "POST",
       headers: {
@@ -56,7 +60,7 @@ async function reject(e: Event) {
   rejectLoading.value = true;
   const id = (e.target as HTMLElement).id;
   const response = await fetch(
-    `${API}/ocbc-bankDetails/rejectMerchantPayment/${id}`,
+    `${API}/cartntell-qrs-payment/rejectMerchantPayment/${id}`,
     {
       method: "POST",
       headers: {
@@ -149,7 +153,19 @@ const sortToPending = computed(() => {
                   scope="col"
                   class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  bankReferenceNo
+                  ProofImage
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  ReferenceID
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Qr Name
                 </th>
                 <th
                   scope="col"
@@ -168,6 +184,7 @@ const sortToPending = computed(() => {
             <tbody
               class="bg-white divide-y divide-gray-200"
               v-for="transaction in sortToPending"
+              :key="transaction.id"
             >
               <tr
                 class="animate-pulse"
@@ -196,7 +213,19 @@ const sortToPending = computed(() => {
                   />
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <p>{{ transaction.bankReferenceNo }}</p>
+                  <NuxtLink :to="transaction.proofImage">
+                    <img
+                      class="h-12 w-12"
+                      :src="transaction.proofImage"
+                      alt=""
+                    />
+                  </NuxtLink>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <p>{{ transaction.referenceID }}</p>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <p>{{ transaction.qrCode.qrName }}</p>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <p>{{ transaction.status }}</p>

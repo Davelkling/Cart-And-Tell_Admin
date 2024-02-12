@@ -104,6 +104,24 @@ function editMode() {
             <h1 class="text-5xl font-black">Bank Details</h1>
           </div>
           <div class="bg-white rounded-3xl w-full p-4 text-center h-full mt-4">
+            <div>
+              <nav>
+                <div class="flex flex-col sm:flex-row font-bold">
+                  <NuxtLink
+                    to="/websiteSettings/bankDetails"
+                    class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none"
+                  >
+                    Bank Details
+                  </NuxtLink>
+                  <NuxtLink
+                    to="/websiteSettings/bankDetails/qrCode"
+                    class="text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none"
+                  >
+                    Bank QR Codes
+                  </NuxtLink>
+                </div>
+              </nav>
+            </div>
             <div class="flex justify-between items-center w-full p-4">
               <img
                 src="/ocbc.png"
@@ -329,4 +347,8 @@ function editMode() {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.router-link-exact-active {
+  border-bottom: 2px solid black;
+}
+</style>
