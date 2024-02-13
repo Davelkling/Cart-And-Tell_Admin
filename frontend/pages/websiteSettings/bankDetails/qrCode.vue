@@ -28,7 +28,6 @@ const { open, reset, onChange } = useFileDialog({ accept: "image/*" });
 const { isOverDropZone } = useDropZone(dropZoneRef, {
   onDrop(files: File[] | null) {
     reset();
-    alert("hello world");
     form.qrCodeImage = files![0];
     previewImage.value = URL.createObjectURL(form.qrCodeImage);
   },
@@ -134,7 +133,7 @@ async function deleteQR(e: Event) {
                   <img :src="qr.qrCodeImage" class="h-[400px]" alt="" />
                   <p class="font-bold text-3xl">{{ qr.qrName }}</p>
                   <button
-                    v-if="!loading && relativeLoading != qr.id"
+                    v-if="relativeLoading != qr.id"
                     :id="qr.id.toString()"
                     class="border-2 px-4 py-2 my-3 bg-red-500 rounded-md text-white font-bold border-red-500"
                     @click="deleteQR"
