@@ -86,6 +86,12 @@ const comparator = (a: any, b: any) => {
 const sortToPending = computed(() => {
   return transactions.value?.toSorted(comparator);
 });
+const searchTerm = ref("");
+const filteredMerchants = computed(() => {
+  return sortToPending!.value!.filter((item) =>
+    item.merchant.name.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
+});
 </script>
 <template>
   <div class="bg-[#F8F9FD]">
@@ -116,8 +122,8 @@ const sortToPending = computed(() => {
               </div>
             </nav>
           </div>
-          <div class="flex justify-between items-center">
-            <div class="flex justify-start items-center">
+          <div class="flex justify-between items-center gap-4">
+            <div class="flex justify-start items-center shrink-0">
               <p class="font-bold p-4">Total of transactions:</p>
               <div
                 v-if="pending"
@@ -127,6 +133,12 @@ const sortToPending = computed(() => {
                 {{ transactions ? transactions!.length : 0 }}
               </p>
             </div>
+            <input
+              v-model="searchTerm"
+              type="text"
+              class="w-full border-2 rounded-md h-[42px] px-4 border-gray-500"
+              placeholder="Search by Merchant Name"
+            />
           </div>
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -183,7 +195,9 @@ const sortToPending = computed(() => {
             </thead>
             <tbody
               class="bg-white divide-y divide-gray-200"
-              v-for="transaction in sortToPending"
+              v-for="transaction in searchTerm
+                ? filteredMerchants
+                : sortToPending"
               :key="transaction.id"
             >
               <tr

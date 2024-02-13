@@ -217,6 +217,12 @@ onBeforeRouteLeave((to, from) => {
     controller.abort();
   }
 });
+const searchTerm = ref("");
+const filteredUsers = computed(() => {
+  return users!.value!.filter((item) =>
+    item.email.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
+});
 </script>
 <template>
   <div class="bg-[#F8F9FD]">
@@ -226,6 +232,7 @@ onBeforeRouteLeave((to, from) => {
         <div class="bg-white rounded-3xl w-full p-4 text-center">
           <h1 class="text-5xl font-black">users</h1>
         </div>
+
         <div class="bg-white rounded-3xl w-full p-4 h-full mt-4">
           <!-- Add Modal -->
           <div
@@ -475,8 +482,8 @@ onBeforeRouteLeave((to, from) => {
               </div>
             </div>
           </div>
-          <div class="flex justify-between items-center">
-            <div class="flex justify-start items-center">
+          <div class="flex justify-between items-center gap-4">
+            <div class="flex justify-start items-center shrink-0">
               <p class="font-bold p-4">Total of users:</p>
               <p v-if="!pending" class="font-bold">
                 {{ users ? users!.length : 0 }}
@@ -486,7 +493,13 @@ onBeforeRouteLeave((to, from) => {
                 class="h-5 rounded-md w-5 bg-gray-400 animate-pulse"
               ></div>
             </div>
-            <div>
+            <input
+              v-model="searchTerm"
+              type="text"
+              class="w-full border-2 rounded-md h-[42px] px-4 border-gray-500"
+              placeholder="Search by Email"
+            />
+            <div class="shrink-0">
               <button
                 @click="openModal"
                 value="create"
@@ -551,7 +564,11 @@ onBeforeRouteLeave((to, from) => {
                   <div class="h-[50%] rounded-md w-full bg-gray-400"></div>
                 </td>
               </tr>
-              <tr v-if="!pending" v-for="user in users" :key="user.id">
+              <tr
+                v-if="!pending"
+                v-for="user in searchTerm ? filteredUsers : users"
+                :key="user.id"
+              >
                 <td class="px-6 py-4 whitespace-nowrap">
                   <p>{{ user.id }}</p>
                 </td>

@@ -182,6 +182,12 @@ onBeforeRouteLeave((to, from) => {
     controller.abort();
   }
 });
+const searchTerm = ref("");
+const filteredUsers = computed(() => {
+  return users!.value!.filter((item) =>
+    item.email.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
+});
 </script>
 <template>
   <div class="bg-[#F8F9FD]">
@@ -379,8 +385,8 @@ onBeforeRouteLeave((to, from) => {
               </div>
             </div>
           </div>
-          <div class="flex justify-between items-center">
-            <div class="flex justify-start items-center">
+          <div class="flex justify-between items-center gap-4">
+            <div class="flex justify-start items-center shrink-0">
               <p class="font-bold p-4">Total of users:</p>
               <div
                 v-if="pending"
@@ -390,16 +396,12 @@ onBeforeRouteLeave((to, from) => {
                 {{ users!.length ? users!.length : 0 }}
               </p>
             </div>
-            <div>
-              <button
-                @click="openModal"
-                value="create"
-                type="button"
-                class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition"
-              >
-                Add user
-              </button>
-            </div>
+            <input
+              v-model="searchTerm"
+              type="text"
+              class="w-full border-2 rounded-md h-[42px] px-4 border-gray-500"
+              placeholder="Search by Email"
+            />
           </div>
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -455,7 +457,10 @@ onBeforeRouteLeave((to, from) => {
                   <div class="h-[50%] rounded-md w-full bg-gray-400"></div>
                 </td>
               </tr>
-              <tr v-for="user in users" :key="user.id">
+              <tr
+                v-for="user in searchTerm ? filteredUsers : users"
+                :key="user.id"
+              >
                 <td class="px-6 py-4 whitespace-nowrap">
                   <p>{{ user.id }}</p>
                 </td>
